@@ -81,11 +81,18 @@ public class Component implements Comparable<Component> {
 
     public int compareTo (Component o) {
         int result;
-        if (this.name.equals(o.getName())) {
-            result = Integer.compare(this.power, o.getPower());
+        if (name.equals(o.getName())) {
+            result = Integer.compare(power, o.getPower());
+            System.out.println("Результат сравнения силы препаратов");
+            System.out.println(result);
         } else {
-            result = this.name.compareTo(o.getName());
+            if (name.compareTo(o.getName()) > 0) result = 1;
+            else result = -1;
+            System.out.println("Результат сравнения названий препаратов препаратов");
+            System.out.println(result);
         }
+        System.out.println("Результат метода compareTo");
+        System.out.println(result);
         return result;
     }
 

@@ -1,13 +1,9 @@
 package ru.gb.lessons.interfaces.core.drugStore;
 
-import org.w3c.dom.ls.LSSerializer;
-import ru.gb.lessons.interfaces.core.clients.DoctorSpecialities;
-import ru.gb.lessons.interfaces.core.personal.Doctor;
-
-import java.io.Serializable;
-import java.util.*;
-
-import static ru.gb.lessons.interfaces.core.clients.DoctorSpecialities.THERAPIST;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -156,6 +152,8 @@ public class Main {
         //       при вызове методов GetComponentsSet непосредственно из вызова данного метода????
         //      НЕ МОГУ ПОНЯТЬ.
         System.out.println(String.format("Равны ли объекты Препаратов 7 и 8? %b", pharmacy7.equals(pharmacy8)));
+        helpVariable = pharmacy7.componentsIdentical(pharmacy8);
+        System.out.println(String.format("Совпадает ли препарат 7 с препаратом 8 по компонентам? %b", helpVariable));
         System.out.println("Присвоим препаратам 7 и 8 одинаковые названия, раз у них идентичные составы");
         pharmacy7.setName("Deadly Poison");
         pharmacy8.setName("Deadly Poison");
@@ -200,13 +198,19 @@ public class Main {
         System.out.println(pharmacy3.compareTo(pharmacy5));
         // СРАВНИМ ПРЕПАРАТЫ 7 И 8 ИЗ ОДИНАКОВОГО КОЛИЧЕСТВА КОМПОНЕНТОВ, С ОДИНАКОВЫМИ ИМЕНАМИ И РАЗНОЙ СИЛОЙ
         System.out.println("СРАВНИМ ПРЕПАРАТЫ 7 И 8 ИЗ ОДИНАКОВОГО КОЛИЧЕСТВА КОМПОНЕНТОВ, С ОДИНАКОВЫМИ ИМЕНАМИ И РАЗНОЙ СИЛОЙ");
-        System.out.println("ОТСОРТИРОВАННЫЙ СПИСОК КОМПОНЕНТОВ ПРЕПАРАТА 7");
-        ArrayList<Component> orderedList7 = pharmacy7.sortComponents();
-        System.out.println(orderedList7);
-        System.out.println("ОТСОРТИРОВАННЫЙ СПИСОК КОМПОНЕНТОВ ПРЕПАРАТА 8");
-        ArrayList<Component> orderedList8 = pharmacy8.sortComponents();
-        System.out.println(orderedList8);
+//        System.out.println("ОТСОРТИРОВАННЫЙ СПИСОК КОМПОНЕНТОВ ПРЕПАРАТА 7");
+//        ArrayList<Component> orderedList7 = pharmacy7.sortComponents();
+//        System.out.println(orderedList7);
+//        System.out.println("ОТСОРТИРОВАННЫЙ СПИСОК КОМПОНЕНТОВ ПРЕПАРАТА 8");
+//        ArrayList<Component> orderedList8 = pharmacy8.sortComponents();
+//        System.out.println(orderedList8);
         System.out.println(pharmacy7.compareTo(pharmacy8));
+
+//        ArrayList<Component> firstList = pharmacy7.getComponents();
+//        ArrayList<Component> secondList = pharmacy8.getComponents();
+//        LinkedList<Component> firstSortedLinkedList = new LinkedList<>();
+//        firstSortedLinkedList.add(sortComponentsList(firstList));
+//        LinkedList<Component> secondSortedLinkedList = sortComponentsList(secondList);
 //        Pharmacy pharmacy6 = new Pharmacy();
 //        pharmacy6.addComponent(comp1).addComponent(comp4).addComponent(comp7);
 //        Pharmacy pharmacy7 = pharmacy1;

@@ -124,31 +124,39 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
 // - У них одинаковые названия, но сила первого больше силы второго, либо
 // - Имя одного компонента (как строковое значение) больше имени другого
     public int compareTo (Pharmacy otherPharm){
-        int result = compareByPower(otherPharm);
-        if (result == 0) {
-            ArrayList<Component> sortedList1 = this.sortComponents();
-            ArrayList<Component> sortedList2 = otherPharm.sortComponents();
+        int res = compareByPower(otherPharm);
+        System.out.println(res);
+        if (res == 0) {
+            ArrayList<Component> sortedList1 = createCopy ((ArrayList<Component>)this.components);
+            System.out.println("Sorted List 1 from method CompareTo (ДО СОРТИРОВКИ)");
             System.out.println(sortedList1);
+            System.out.println("Sorted List 1 from method CompareTo");
+            sortComponents(sortedList1);
+            System.out.println(sortedList1);
+            System.out.println("Sorted List 2 from method CompareTo (ДО СОРТИРОВКИ)");
+            ArrayList<Component> sortedList2 = createCopy ((ArrayList<Component>)otherPharm.components);
             System.out.println(sortedList2);
-            return (compareComponents(sortedList1, sortedList2));
+            System.out.println("Sorted List 2 from method CompareTo");
+            sortComponents(sortedList2);
+            System.out.println(sortedList2);
+            System.out.println("Сравниваем компоненты sortedList1 и sortedList2");
+            res = compareComponents(sortedList1, sortedList2);
         }
-        return result;
+        return res;
     }
     // Метод сортировки списка компонентов препарата по возрастанию методом compareTo
-    public ArrayList<Component> sortComponents () {
-        ArrayList<Component> result = createCopy((ArrayList<Component>) this.components);
-        if (result != null) {
-            for (int i = result.size()-1; i > 0 ; i--) {
+    public void sortComponents (ArrayList<Component> listOfComp) {
+        if (listOfComp != null) {
+            for (int i = listOfComp.size()-1; i > 0 ; i--) {
                 for (int j = 0; j < i; j++) {
-                    if (result.get(j).compareTo(result.get(j+1)) == 1) {
-                        Component temp = makeCopy(result.get(j));
-                        result.set(j + 1, result.get(j));
-                        result.set(j, temp);
+                    if (listOfComp.get(j).compareTo(listOfComp.get(j+1)) == 1) { /* !!!!!!!!!!!!!!!!!!*/
+                        Component temp = listOfComp.get(j);
+                        listOfComp.set(j, listOfComp.get(j+1));
+                        listOfComp.set(j+1, temp);
                     }
                 }
             }
         }
-        return result;
     }
     protected Component makeCopy (Component sourceComponent) {
         Component newComponent = new Component(sourceComponent.getName(), sourceComponent.getWeight(), sourceComponent.getPower());
@@ -162,12 +170,14 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         else if (another == null) return 1;
         else {
             int sizeCompareResult = Integer.compare(one.size(), another.size());
+            System.out.println(String.format("Size Compare result = %d", sizeCompareResult));
             if (sizeCompareResult != 0) return sizeCompareResult;
             else {
                 int i = 0;
                 int result = 0;
                 while (i < one.size() && result == 0) {
                     result = one.get(i).compareTo(another.get(i));
+                    System.out.println(String.format("i = %d, result = %d", i, result));
                     i++;
                 }
                 return result;

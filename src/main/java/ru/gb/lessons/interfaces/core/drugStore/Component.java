@@ -31,18 +31,6 @@ public class Component implements Comparable<Component> {
     public void setPower(int power) {
         this.power = power;
     }
-    void addWeight (String additionWeight) {
-        this.weight = weight.concat(" + ").concat(additionWeight);
-    }
-   void addPower(int additionPower) {
-        this.power += additionPower;
-    }
-
-    @Override
-    public String toString() {
-        return "Компонент: " +
-                "Name = " + name + ", Weight = " + weight + ", Power= " + power + ", HashCode = " + this.hashCode() + "\n";
-    }
     public String getName() {
         return this.name;
     }
@@ -53,11 +41,31 @@ public class Component implements Comparable<Component> {
         return this.power;
     }
 
+    // Метод позволяет увеличить силу вес компонента препарата.
+    // применяется при создании множества компонентов, если в инструкции к препарату некоторый компонент
+    // встречается не один раз
+    void addWeight (String additionWeight) {
+        this.weight = weight.concat(" + ").concat(additionWeight);
+
+    }
+    // Метод позволяет увеличить силу компонента препарата.
+    // применяется при создании множества компонентов, если в инструкции к препарату некоторый компонент
+    // встречается не один раз
+   void addPower(int additionPower) {
+
+        this.power += additionPower;
+    }
+
+    @Override
+    public String toString() {
+        return "Компонент: " +
+                "Name = " + name + ", Weight = " + weight + ", Power= " + power + ", HashCode = " + this.hashCode() + "\n";
+    }
     protected void showHashCode() {
         System.out.println(String.format("Хеш-код компонента %s равен %s", getName(), hashCode()));
     }
     protected void showDetails() {
-        System.out.println(String.format("%s, %s, сила компонента - %d ед.", getName(), getWeight(), getPower()));
+        System.out.println(String.format("Компонент %s: вес %s, сила  - %d ед.", getName(), getWeight(), getPower()));
     }
 
     @Override
@@ -65,12 +73,14 @@ public class Component implements Comparable<Component> {
         int result = 17;
         int factor = 31;
         result = result*factor + this.name.hashCode();
+//      Поскольку вес компонента может быть записан в инструкции по-разному, не включаем его в метод вычисления хеша
+//      Пример: 50мг или 0.05 г
 //        result = result*factor + this.weight.hashCode();
         result = (result*factor + this.power)>>>1;
         return result;
     }
 
-    // Компоненты равны, если у них одинаковые имена и сила
+    // Компоненты равны, если у них одинаковые имена и силы
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,19 +90,19 @@ public class Component implements Comparable<Component> {
     }
 
     public int compareTo (Component o) {
-        int result;
+        int result = 0;
         if (name.equals(o.getName())) {
             result = Integer.compare(power, o.getPower());
-            System.out.println("Результат сравнения силы препаратов");
-            System.out.println(result);
+//            System.out.println("Результат сравнения силы препаратов");
+//            System.out.println(result);
         } else {
             if (name.compareTo(o.getName()) > 0) result = 1;
             else result = -1;
-            System.out.println("Результат сравнения названий препаратов препаратов");
-            System.out.println(result);
+//            System.out.println("Результат сравнения названий препаратов препаратов");
+//            System.out.println(result);
         }
-        System.out.println("Результат метода compareTo");
-        System.out.println(result);
+//        System.out.println("Результат метода compareTo");
+//        System.out.println(result);
         return result;
     }
 

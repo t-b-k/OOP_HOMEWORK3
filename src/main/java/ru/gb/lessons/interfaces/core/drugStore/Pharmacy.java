@@ -46,7 +46,7 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         newElem.setPower(sourceComponent.getPower());
         return newElem;
     }
-    // Метод возвращает копию списка компонента препарата
+    // Метод возвращает копию списка компонента препарата для его последующей модификацию с целью сравнения
     public ArrayList<Component> createCopy (ArrayList<Component> sourceComponentList) {
         ArrayList<Component> newComponentList = new ArrayList<>();
         for (int i = 0; i < sourceComponentList.size(); i++) {
@@ -55,13 +55,13 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         }
         return newComponentList;
     }
-    // Вывод в консоль полной информации о препарате
+    // Вывод в консоль полной информации о препарате: список компонентов, сила, хеш-код
     public void showFullInfo () {
         showComponents();
         showPharmacyPower();
         showHashCode();
     }
-    // Вывод в консоль перечня компонентов препарата
+    // Вывод в консоль списка компонентов препарата (как в инструкции)
     public void showComponents() {
         System.out.println(String.format("Состав препарата %s: ", name));
         for (Component elem : components) {
@@ -88,6 +88,7 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
     @Override
     public Iterator<Component> iterator() {
         return new ComponentIterator();
+//        ДЕЛАЛИ НА СЕМИНАРЕ, НЕ ХОЧУ УДАЛЯТЬ
 //  Альтернативная реализация с использованием анонимного класса
 //        return new Iterator<Component>() {
 //            public Component next() {
@@ -99,7 +100,7 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
 //            }
 //        };
     }
-    // Переопределили метод CompareTo для объектов класса Pharmacy/
+    // Переопределили метод CompareTo для объектов класса Pharmacy
     // Метод сравнивает препараты по силе методом сравнения целых чисел:
     // если силы равны, возвращается 0,
     // если сила первого препарата меньше силы второго, возвращается -1,
@@ -119,65 +120,39 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
 
 // Метод сравнения двух препаратов.
 // Если сравнение препаратов по силе дает 0 (то есть, они равны по силе),
-// сравнивает их упорядоченные списки компонентов покомпонентно.
+// сравнивает их упорядоченные списки компонентов (из инструкции) покомпонентно до первого неравенства.
 // Один компонент больше другого, если:
 // - У них одинаковые названия, но сила первого больше силы второго, либо
 // - Имя одного компонента (как строковое значение) больше имени другого
     public int compareTo (Pharmacy otherPharm){
         int res = compareByPower(otherPharm);
-        System.out.println(res);
         if (res == 0) {
             ArrayList<Component> sortedList1 = createCopy ((ArrayList<Component>)this.components);
-            System.out.println("Sorted List 1 from method CompareTo (ДО СОРТИРОВКИ)");
-            System.out.println(sortedList1);
-            System.out.println("Sorted List 1 from method CompareTo");
             sortComponents(sortedList1);
-            System.out.println(sortedList1);
-            System.out.println("Sorted List 2 from method CompareTo (ДО СОРТИРОВКИ)");
             ArrayList<Component> sortedList2 = createCopy ((ArrayList<Component>)otherPharm.components);
-            System.out.println(sortedList2);
-            System.out.println("Sorted List 2 from method CompareTo");
             sortComponents(sortedList2);
-            System.out.println(sortedList2);
-            System.out.println("Сравниваем компоненты sortedList1 и sortedList2");
             res = compareComponents(sortedList1, sortedList2);
         }
         return res;
     }
     // Метод сортировки списка компонентов препарата по возрастанию методом compareTo
     public void sortComponents (ArrayList<Component> listOfComp) {
-        if (listOfComp != null) {
-            for (int i = listOfComp.size()-1; i > 0 ; i--) {
-                for (int j = 0; j < i; j++) {
-                    if (listOfComp.get(j).compareTo(listOfComp.get(j+1)) == 1) { /* !!!!!!!!!!!!!!!!!!*/
-                        Component temp = listOfComp.get(j);
-                        listOfComp.set(j, listOfComp.get(j+1));
-                        listOfComp.set(j+1, temp);
-                    }
-                }
-            }
+            Collections.sort(listOfComp, new ComponentsComparator());
         }
-    }
-    protected Component makeCopy (Component sourceComponent) {
-        Component newComponent = new Component(sourceComponent.getName(), sourceComponent.getWeight(), sourceComponent.getPower());
-        return newComponent;
-    }
 
-    // Метод сравнения двух отсортированных по возрастанию списков компонентов
+    // Метод сравнения двух отсортированных по возрастанию списков компонентов (применяется в CompareTo)
     public int compareComponents (ArrayList<Component> one, ArrayList<Component> another) {
         if (one == null && another == null) return 0;
         else if (one ==null) return -1;
         else if (another == null) return 1;
         else {
             int sizeCompareResult = Integer.compare(one.size(), another.size());
-            System.out.println(String.format("Size Compare result = %d", sizeCompareResult));
             if (sizeCompareResult != 0) return sizeCompareResult;
             else {
                 int i = 0;
                 int result = 0;
                 while (i < one.size() && result == 0) {
                     result = one.get(i).compareTo(another.get(i));
-                    System.out.println(String.format("i = %d, result = %d", i, result));
                     i++;
                 }
                 return result;
@@ -185,15 +160,11 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         }
     }
 
-    // Метод сравнивает два препарата по силе.
+    // Метод сравнивает два препарата по силе суммированием сил компонентов
     public int compareByPower(Pharmacy o) {
         int pow1 = getPower();
         int pow2 = o.getPower();
         return Integer.compare(pow1, pow2);
-//        Альтернативная запись:
-//        if (pow1 > pow2) return 1;
-//        else if (pow1 < pow2) return -1;
-//        else return 0;
     }
     // Метод вычисляет силу препарата как сумму сил его компонетов
     public int getPower() {
@@ -203,8 +174,8 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         }
         return result;
     }
-    // Метод проверяет два объекта препарата на полную идентичность
-    // возвращает 1, если у препаратов полностью совпадают названия и описание состава.
+    // Метод проверяет два объекта препарата на полную идентичность именно как объектов
+    // возвращает 1, если у препаратов полностью совпадают названия и описание состава (инструкция).
     public boolean equals (Object o) {
         if (this == o) return true;
         if (o == null || o.getClass() != this.getClass()) return false;
@@ -217,29 +188,20 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
         return false;
     }
 
-    // Метода возвращает множество компонентов препарата, суммируя вес и силу препаратов с одинаковыми названиями,
-    // если какой-то препарат в списке препаратов встречается дважды (маловероятная ситуация, конечно, но так интереснее ).
+    // Метод возвращает множество компонентов препарата, суммируя вес и силу препаратов с одинаковыми названиями
+    // (на случай, если какой-то препарат в списке препаратов встречается дважды. Это маловероятная ситуация, конечно, но так интереснее ).
     public ComponentsSet getComponentsSet() {
-//        System.out.println(this.getComponents());
         ComponentsSet result = new ComponentsSet();
         int cycleCountOut = 1;
         for (Component nextElem : this.getComponents()) {
-//            System.out.println(String.format("%d-й проход внешнего цикла: ", cycleCountOut));
             boolean met = false;
             int cycleCountIn = 1;
             for (Component resElem : result.getMembers())
             {
-//                System.out.println(String.format("%d-й проход внутреннего цикла: ", cycleCountIn));
-//                System.out.println("result Set = ");
-//                System.out.println(result.getMembers());
                 if (nextElem.getName().equals(resElem.getName())) {
                     met = true;
                     resElem.addPower(nextElem.getPower());
-//                    System.out.println(temp);
-//                    resElem.addPower(nextElem.getPower());
                     resElem.addWeight(nextElem.getWeight());
-//                    System.out.println("result Set = ");
-//                    System.out.println(result.getMembers());
                 }
                 cycleCountIn++;
             }
@@ -247,13 +209,12 @@ public class Pharmacy implements Iterable<Component>, Comparable<Pharmacy>, Mark
                 Component newSetElem = createCopy(nextElem);
                 result.add(createCopy(nextElem));
             }
-//            System.out.println(result.getMembers());
             cycleCountOut++;
         }
         return result;
     }
-    // Метод сравнивает состав двух препаратов на эквивалентность.
-    // Препараты эквивалентны, если у них одинаковые множества входящих в них уникальных компонентов.
+    // Метод сравнивает состав двух препаратов на аналогичность.
+    // Препараты аналогичны, если у них одинаковые множества входящих в их состав компонентов.
     // Уникальность проверяется путем суммирования хэш-кодов компонентов, которые зависят только от названия и силы.
     public boolean componentsIdentical (Pharmacy o) {
         return this.getComponentsSet().equals(o.getComponentsSet());

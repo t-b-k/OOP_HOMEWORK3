@@ -93,16 +93,10 @@ public class Component implements Comparable<Component> {
         int result = 0;
         if (name.equals(o.getName())) {
             result = Integer.compare(power, o.getPower());
-//            System.out.println("Результат сравнения силы препаратов");
-//            System.out.println(result);
         } else {
             if (name.compareTo(o.getName()) > 0) result = 1;
             else result = -1;
-//            System.out.println("Результат сравнения названий препаратов препаратов");
-//            System.out.println(result);
         }
-//        System.out.println("Результат метода compareTo");
-//        System.out.println(result);
         return result;
     }
 

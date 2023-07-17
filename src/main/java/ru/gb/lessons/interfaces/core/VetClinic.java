@@ -2,8 +2,7 @@ package ru.gb.lessons.interfaces.core;
 
 
 import org.w3c.dom.ls.LSOutput;
-import ru.gb.lessons.interfaces.core.clients.Animal;
-import ru.gb.lessons.interfaces.core.clients.Animals;
+import ru.gb.lessons.interfaces.core.clients.*;
 import ru.gb.lessons.interfaces.core.clients.Runnable;
 import ru.gb.lessons.interfaces.core.clients.home.impl.*;
 import ru.gb.lessons.interfaces.core.clients.owners.Owner;
@@ -113,44 +112,38 @@ public class VetClinic {
 
     static LinkedList<Animal> getRunnable() {
         LinkedList<Animal> result = new LinkedList<>();
-        for (Animal patient: animals) {
-            for (int i = 0; i < patient.getClass().getInterfaces().length; i++) {
-                if (patient.getClass().getInterfaces()[i].toString().endsWith("Runnable")) {
-                    result.add(patient);
-                }
+        for (Animal patient : animals) {
+            if (patient instanceof Runnable) {
+                result.add(patient);
             }
+
         }
         return result;
     }
+
     static LinkedList<Animal> getSwimable() {
         LinkedList<Animal> result = new LinkedList<>();
-        for (Animal patient: animals) {
-            for (int i = 0; i < patient.getClass().getInterfaces().length; i++) {
-                if (patient.getClass().getInterfaces()[i].toString().endsWith("Swimable")) {
-                    result.add(patient);
-                }
+        for (Animal patient : animals) {
+            if (patient instanceof Swimable) {
+                result.add(patient);
             }
         }
         return result;
     }
     static LinkedList<Animal> getFlyable() {
         LinkedList<Animal> result = new LinkedList<>();
-        for (Animal patient: animals) {
-            for (int i = 0; i < patient.getClass().getInterfaces().length; i++) {
-                if (patient.getClass().getInterfaces()[i].toString().endsWith("Flyable")) {
-                    result.add(patient);
-                }
+        for (Animal patient : animals) {
+            if (patient instanceof Swimable) {
+                result.add(patient);
             }
         }
         return result;
     }
     static LinkedList<Animal> getSoundable() {
         LinkedList<Animal> result = new LinkedList<>();
-        for (Animal patient: animals) {
-            for (int i = 0; i < patient.getClass().getInterfaces().length; i++) {
-                if (patient.getClass().getInterfaces()[i].toString().endsWith("Soundable")) {
-                    result.add(patient);
-                }
+        for (Animal patient : animals) {
+            if (patient instanceof Soundable) {
+                result.add(patient);
             }
         }
         return result;
